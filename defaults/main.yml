@@ -1,0 +1,36 @@
+---
+# WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour
+# with the system package manager. It is recommended to use a virtual environment
+# instead: https://pip.pypa.io/warnings/venv
+# For example the variables `python_pip_venvs` down below
+# Define pip packages
+python_pip_packages: []
+#  - "python-dateutil"
+#  - "python-dateutil==0.11"
+#  - "python-dateutil>=1.1,<=2.1"
+#  - "python-dateutil>=1"
+python_pip_packages_group: []
+python_pip_packages_host: []
+
+# State of the pip packages outside of the venvs
+python_pip_packages_state: present
+# extra pip arguments, wehen installing the packages
+# outside of the venvs
+# default(omit)
+python_pip_packages_args: ""
+
+python_pip_venvs: []
+#  - name: "fullExample"         # required
+#    python: "python"            # required
+#    path: "/opt"                # required
+#    packages:                   # optional => default(omit)
+#      - "python-dateutil"
+#    extra_args: "--no-compile"  # optional => default(omit)
+#    state: latest               # optional => default("present")
+#  - name: "minExample"
+#    python: "python"
+#    path: "/opt"
+#  - name: "mixExample"
+#    python: "python"
+#    path: "/opt"
+#    state: latest

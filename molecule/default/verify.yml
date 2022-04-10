@@ -1,0 +1,134 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    python_pip_os_packages_map:
+      CentOS:
+        "7":
+          - "python2-pip"
+          - "python2-setuptools"
+          - "python2-wheel"
+          - "python2-virtualenv"
+        "8":
+          - "python3-pip"
+          - "python3-setuptools"
+          - "python3-wheel"
+          - "python3-virtualenv"
+        "9":
+          - "python3-pip"
+          - "python3-setuptools"
+          - "python3-wheel"
+          - "python3-virtualenv"
+      RedHat:
+        "7":
+          - "python2-pip"
+          - "python2-setuptools"
+          - "python2-wheel"
+          - "python2-virtualenv"
+        "8":
+          - "python3-pip"
+          - "python3-setuptools"
+          - "python3-wheel"
+          - "python3-virtualenv"
+        "9":
+          - "python3-pip"
+          - "python3-setuptools"
+          - "python3-wheel"
+          - "python3-virtualenv"
+      Fedora:
+        - "python3-pip"
+        - "python3-setuptools"
+        - "python3-wheel"
+        - "python3-virtualenv"
+      Rocky:
+        "8":
+          - "python3-pip"
+          - "python3-setuptools"
+          - "python3-wheel"
+          - "python3-virtualenv"
+      AlmaLinux:
+        "8":
+          - "python3-pip"
+          - "python3-setuptools"
+          - "python3-wheel"
+          - "python3-virtualenv"
+      Amazon:
+        "2":
+          - "python2-pip"
+          - "python2-setuptools"
+          - "python2-wheel"
+          - "python2-virtualenv"
+      Debian:
+        - "python-pip"
+        - "python-setuptools"
+        - "python-wheel"
+        - "python-virtualenv"
+      Ubuntu:
+        - "python-pip"
+        - "python-setuptools"
+        - "python-wheel"
+        - "python-virtualenv"
+    python_pip_os_packages: "{{ python_pip_os_packages_map[ansible_distribution][ansible_distribution_major_version] | default(python_pip_os_packages_map[ansible_distribution]) }}"
+
+    # converge variables
+    python_pip_packages:
+      - "python-dateutil"
+
+    python_pip_venvs:
+      - name: "fullExample"
+        python: "python"
+        path: "/opt"
+        packages:
+          - "python-dateutil"
+        extra_args: "--no-compile"
+        state: latest
+      - name: "minExample"
+        python: "python"
+        path: "/opt"
+      - name: "mixExample"
+        python: "python"
+        path: "/opt"
+        state: latest
+
+  tasks:
+    - name: SmokeTests
+      ansible.builtin.debug:
+        msg:
+          - "ansible_version => {{ansible_version}}"
+          - "ansible_distribution => {{ ansible_distribution }}"
+          - "ansible_distribution_major_version => {{ ansible_distribution_major_version }}"
+          - "ansible_os_family  => {{ ansible_os_family}}"
+          - "ansible_system  => {{ ansible_system }}"
+
+    - name: check installed python os packages
+      ansible.builtin.package:
+        name: "{{ python_pip_os_packages }}"
+        state: present
+      check_mode: true
+      register: molecule_debian_molecule
+      failed_when: (molecule_debian_molecule is changed) or (molecule_debian_molecule is failed)
+
+    - name: Install packages via pip
+      ansible.builtin.pip:
+        name: "{{ python_pip_packages }}"
+        state: present
+      check_mode: true
+      register: molecule_pip_packages
+      failed_when: (molecule_pip_packages is changed) or (molecule_pip_packages is failed)
+
+    - name: check venvs
+      ansible.builtin.pip:
+        name: "{{ item.packages }}"
+        state: present
+        virtualenv: "{{ item.path }}/{{ item.name }}"
+        virtualenv_python: "{{ item.python }}"
+      check_mode: true
+      register: molecule_pip_packages_venvs
+      failed_when: (molecule_pip_packages_venvs is changed) or (molecule_pip_packages_venvs is failed)
+      with_items:
+        - "{{ python_pip_venvs }}"
+      when:
+        - item.packages is defined
+        - item.packages | length > 0

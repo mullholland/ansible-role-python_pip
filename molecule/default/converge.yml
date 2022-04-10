@@ -1,0 +1,27 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    python_pip_packages:
+      - "python-dateutil"
+
+    python_pip_venvs:
+      - name: "fullExample"
+        python: "python"
+        path: "/opt"
+        packages:
+          - "python-dateutil"
+        extra_args: "--no-compile"
+        state: latest
+      - name: "minExample"
+        python: "python"
+        path: "/opt"
+      - name: "mixExample"
+        python: "python"
+        path: "/opt"
+        state: latest
+
+  roles:
+    - role: "ansible-role-python_pip"

@@ -1,0 +1,26 @@
+---
+- name: "Create/Update venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
+  ansible.builtin.pip:
+    name:
+      - "pip"
+      - "setuptools"
+      - "wheel"
+    state: '{{ venv.state | default("present") }}'
+    extra_args: "{{ venv.extra_args | default(omit) }}"
+    virtualenv: "{{ venv.path }}/{{ venv.name }}"
+    virtualenv_python: "{{ venv.python }}"
+  when:
+    - venv.state is defined
+    - venv.state == "latest"
+
+
+- name: "Install Packages in venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
+  ansible.builtin.pip:
+    name: "{{ venv.packages }}"
+    state: '{{ venv.state | default("present") }}'
+    extra_args: "{{ venv.extra_args | default(omit) }}"
+    virtualenv: "{{ venv.path }}/{{ venv.name }}"
+    virtualenv_python: "{{ venv.python }}"
+  when:
+    - venv.packages is defined
+    - venv.packages | length > 0

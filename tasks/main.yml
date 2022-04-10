@@ -1,0 +1,28 @@
+---
+- name: Install python pip
+  ansible.builtin.package:
+    name: "{{ python_pip_os_packages }}"
+    state: present
+    update_cache: true
+
+- name: Build pip package list
+  ansible.builtin.set_fact:
+    python_pip_packages_merged: "{{ python_pip_packages_merged + [item] }}"
+  with_items:
+    - "{{ python_pip_packages }}"
+    - "{{ python_pip_packages_group }}"
+    - "{{ python_pip_packages_host }}"
+
+- name: Install packages via pip
+  ansible.builtin.pip:
+    name: "{{ python_pip_packages_merged }}"
+    state: "{{ python_pip_packages_state | default('present') }}"
+    extra_args: "{{ python_pip_packages_args | default(omit) }}"
+
+- name: create python virtual environments (venv)
+  ansible.builtin.include_tasks: venv.yml
+  with_items:
+    - "{{ python_pip_venvs }}"
+  loop_control:
+    loop_var: venv
+    label: "{{ venv.name }}"
