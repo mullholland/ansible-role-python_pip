@@ -1,12 +1,12 @@
 ---
 - name: "Ensure venv directory {{ venv.path }}/{{ venv.name }} exists"
-  file:
+  ansible.builtin.file:
     path: "{{ venv.path }}"
     state: directory
     mode: '0755'
 
 - name: "Create venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
-  pip:
+  ansible.builtin.pip:
     name:
       - "pip"
       - "setuptools"
@@ -16,7 +16,7 @@
     virtualenv_python: "{{ venv.python }}"
 
 - name: "Install packages in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
-  pip:
+  ansible.builtin.pip:
     name: "{{ venv.packages }}"
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
