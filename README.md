@@ -131,7 +131,6 @@ This role has been tested on these [container images](https://hub.docker.com/u/m
 -   [ubi8](https://hub.docker.com/r/mullholland/docker-molecule-ubi8)
 -   [fedora34](https://hub.docker.com/r/mullholland/docker-molecule-fedora34)
 -   [fedora35](https://hub.docker.com/r/mullholland/docker-molecule-fedora35)
--   [amazonlinux](https://hub.docker.com/r/mullholland/docker-molecule-amazonlinux)
 -   [rockylinux8](https://hub.docker.com/r/mullholland/docker-molecule-rockylinux8)
 -   [almalinux8](https://hub.docker.com/r/mullholland/docker-molecule-almalinux8)
 
@@ -143,6 +142,13 @@ The minimum version of Ansible required is 2.10, tests have been done to:
 
 
 
+## [Exceptions](#exceptions)
+
+Some variations of the build matrix do not work. These are the variations and reasons why the build won't work:
+
+| variation                 | reason                 |
+|---------------------------|------------------------|
+| amazonlinux | Interpreter Problems |
 
 
 If you find issues, please register them in [GitHub](https://github.com/mullholland/ansible-role-python_pip/issues)
