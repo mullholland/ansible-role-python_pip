@@ -14,6 +14,8 @@
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
     virtualenv_python: "{{ venv.python }}"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
 
 - name: "Install packages in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
   ansible.builtin.pip:
@@ -21,6 +23,8 @@
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
     virtualenv_python: "{{ venv.python }}"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
   when:
     - venv.packages is defined
     - venv.packages | length > 0
