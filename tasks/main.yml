@@ -5,6 +5,26 @@
     state: present
     update_cache: true
 
+# https://docs.ansible.com/ansible/latest/modules/pip_module.html
+# The setuptools package must be installed for both the Ansible Python
+# interpreter and for the version of Python specified by this option.
+- name: install python2-setuptools for python2 interpreter
+  block:
+    - name: Debug ansible_python_version
+      ansible.builtin.debug:
+        msg: "ansible_python_version => {{ ansible_python_version }}"
+
+    - name: install python2-setuptools for python2 interpreter
+      ansible.builtin.package:
+        name: python-setuptools
+        state: present
+  when: (ansible_python_version is version('3.0.0', '<'))
+
+- name: Install virtualenv/wheel
+  ansible.builtin.pip:
+    name: "{{ python_pip_venv_packages }}"
+    state: "latest"  # noqa package-latest
+
 - name: Build pip package list
   ansible.builtin.set_fact:
     python_pip_packages_merged: "{{ python_pip_packages_merged + [item] }}"
@@ -12,6 +32,13 @@
     - "{{ python_pip_packages }}"
     - "{{ python_pip_packages_group }}"
     - "{{ python_pip_packages_host }}"
+
+- name: update pip
+  ansible.builtin.pip:
+    name: "{{ python_pip_package }}"
+    state: "latest"  # noqa package-latest
+  when:
+    - python_pip_update | bool
 
 - name: Install packages via pip
   ansible.builtin.pip:

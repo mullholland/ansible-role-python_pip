@@ -24,12 +24,8 @@ python_pip_packages: []
 python_pip_packages_group: []
 python_pip_packages_host: []
 
-# State of the pip packages outside of the venvs
-python_pip_packages_state: present
-# extra pip arguments, wehen installing the packages
-# outside of the venvs
-# default(omit)
-python_pip_packages_args: ""
+# Update pip package before installing packages
+python_pip_update: true
 
 python_pip_venvs: []
 #  - name: "fullExample"         # required
@@ -62,9 +58,24 @@ This example is taken from `molecule/default/converge.yml` and is tested on each
     python_pip_packages:
       - "python-dateutil"
 
+    # pyvenv_command_map:
+    #   CentOS-7:
+    #     - "python2-pip"
+    #     - "python-setuptools"
+    #   RedHat-7:
+    #     - "python2-pip"
+    #     - "python-setuptools"
+    #   Amazon-2:
+    #     - "python2-pip"
+    #     - "python2-setuptools"
+    #   default: "python3 -m venv"
+    # # yamllint disable-line rule:line-length
+    # pyvenv_command: "{{ pyvenv_command_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(pyvenv_command_map['default'] ) }}"
+
+
     python_pip_venvs:
       - name: "fullExample"
-        python: "python"
+        python: "python3"
         path: "/opt"
         packages:
           - "python-dateutil"
@@ -80,6 +91,25 @@ This example is taken from `molecule/default/converge.yml` and is tested on each
 
   roles:
     - role: "mullholland.python_pip"
+```
+
+The machine needs to be prepared in CI this is done using `molecule/default/prepare.yml`:
+```yaml
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: mullholland.repository_epel
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+      when:
+        - ansible_os_family == "Debian"
 ```
 
 

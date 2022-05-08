@@ -3,70 +3,28 @@
 python_pip_packages_merged: []
 
 python_pip_os_packages_map:
-  CentOS:
-    "7":
-      - "python2-pip"
-      - "python2-setuptools"
-      - "python2-wheel"
-      - "python2-virtualenv"
-    "8":
-      - "python3-pip"
-      - "python3-setuptools"
-      - "python3-wheel"
-      - "python3-virtualenv"
-    "9":
-      - "python3-pip"
-      - "python3-setuptools"
-      - "python3-wheel"
-      - "python3-virtualenv"
-  RedHat:
-    "7":
-      - "python2-pip"
-      - "python2-setuptools"
-      - "python2-wheel"
-      - "python2-virtualenv"
-    "8":
-      - "python3-pip"
-      - "python3-setuptools"
-      - "python3-wheel"
-      - "python3-virtualenv"
-    "9":
-      - "python3-pip"
-      - "python3-setuptools"
-      - "python3-wheel"
-      - "python3-virtualenv"
-  Fedora:
+  CentOS-7:
+    - "python2-pip"
+    - "python-setuptools"
+  RedHat-7:
+    - "python2-pip"
+    - "python-setuptools"
+  Amazon-2:
+    - "python2-pip"
+    - "python2-setuptools"
+  default:
     - "python3-pip"
     - "python3-setuptools"
-    - "python3-wheel"
-    - "python3-virtualenv"
-  Rocky:
-    "8":
-      - "python3-pip"
-      - "python3-setuptools"
-      - "python3-wheel"
-      - "python3-virtualenv"
-  AlmaLinux:
-    "8":
-      - "python3-pip"
-      - "python3-setuptools"
-      - "python3-wheel"
-      - "python3-virtualenv"
-  Amazon:
-    "2":
-      - "python2-pip"
-      - "python2-setuptools"
-      - "python2-wheel"
-      - "python2-virtualenv"
-  Debian:
-    - "python-pip"
-    - "python-setuptools"
-    - "python-wheel"
-    - "python-virtualenv"
-  Ubuntu:
-    - "python-pip"
-    - "python-setuptools"
-    - "python-wheel"
-    - "python-virtualenv"
+# yamllint disable-line rule:line-length
+python_pip_os_packages: "{{ python_pip_os_packages_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(python_pip_os_packages_map['default'] ) }}"
 
-python_pip_os_packages: "{{ python_pip_os_packages_map[ansible_distribution][ansible_distribution_major_version] | default(python_pip_os_packages_map[ansible_distribution]) }}"
+python_pip_package_map:
+  RedHat-7: "pip==20.3.4"
+  CentOS-7: "pip==20.3.4"
+  default: "pip"
+# yamllint disable-line rule:line-length
+python_pip_package: "{{ python_pip_package_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(python_pip_package_map['default'] ) }}"
+
+python_pip_venv_packages:
+  - "wheel"
+  - "virtualenv"

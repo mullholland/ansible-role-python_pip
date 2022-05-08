@@ -1,23 +1,23 @@
 ---
-- name: "Create/Update venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
-  ansible.builtin.pip:
+- name: "Ensure venv directory {{ venv.path }}/{{ venv.name }} exists"
+  file:
+    path: "{{ venv.path }}"
+    state: directory
+    mode: '0755'
+
+- name: "Create venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
+  pip:
     name:
       - "pip"
       - "setuptools"
       - "wheel"
-    state: '{{ venv.state | default("present") }}'
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
     virtualenv_python: "{{ venv.python }}"
-  when:
-    - venv.state is defined
-    - venv.state == "latest"
 
-
-- name: "Install Packages in venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
-  ansible.builtin.pip:
+- name: "Install packages in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
+  pip:
     name: "{{ venv.packages }}"
-    state: '{{ venv.state | default("present") }}'
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
     virtualenv_python: "{{ venv.python }}"
