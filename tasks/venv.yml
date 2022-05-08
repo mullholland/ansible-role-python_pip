@@ -1,26 +1,30 @@
 ---
-- name: "Create/Update venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
+- name: "Ensure venv directory {{ venv.path }}/{{ venv.name }} exists"
+  ansible.builtin.file:
+    path: "{{ venv.path }}"
+    state: directory
+    mode: '0755'
+
+- name: "Create venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
   ansible.builtin.pip:
     name:
       - "pip"
       - "setuptools"
       - "wheel"
-    state: '{{ venv.state | default("present") }}'
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
-    virtualenv_python: "{{ venv.python }}"
-  when:
-    - venv.state is defined
-    - venv.state == "latest"
+    virtualenv_python: "{{ venv.python | default(omit) }}"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
 
-
-- name: "Install Packages in venv in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
+- name: "Install packages in {{ venv.path }}/{{ venv.name }} with {{ venv.python }}"
   ansible.builtin.pip:
     name: "{{ venv.packages }}"
-    state: '{{ venv.state | default("present") }}'
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
-    virtualenv_python: "{{ venv.python }}"
+    virtualenv_python: "{{ venv.python | default(omit) }}"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
   when:
     - venv.packages is defined
     - venv.packages | length > 0

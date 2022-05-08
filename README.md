@@ -24,12 +24,8 @@ python_pip_packages: []
 python_pip_packages_group: []
 python_pip_packages_host: []
 
-# State of the pip packages outside of the venvs
-python_pip_packages_state: present
-# extra pip arguments, wehen installing the packages
-# outside of the venvs
-# default(omit)
-python_pip_packages_args: ""
+# Update pip package before installing packages
+python_pip_update: true
 
 python_pip_venvs: []
 #  - name: "fullExample"         # required
@@ -62,9 +58,24 @@ This example is taken from `molecule/default/converge.yml` and is tested on each
     python_pip_packages:
       - "python-dateutil"
 
+    # pyvenv_command_map:
+    #   CentOS-7:
+    #     - "python2-pip"
+    #     - "python-setuptools"
+    #   RedHat-7:
+    #     - "python2-pip"
+    #     - "python-setuptools"
+    #   Amazon-2:
+    #     - "python2-pip"
+    #     - "python2-setuptools"
+    #   default: "python3 -m venv"
+    # # yamllint disable-line rule:line-length
+    # pyvenv_command: "{{ pyvenv_command_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(pyvenv_command_map['default'] ) }}"
+
+
     python_pip_venvs:
       - name: "fullExample"
-        python: "python"
+        python: "python3"
         path: "/opt"
         packages:
           - "python-dateutil"
@@ -82,6 +93,25 @@ This example is taken from `molecule/default/converge.yml` and is tested on each
     - role: "mullholland.python_pip"
 ```
 
+The machine needs to be prepared in CI this is done using `molecule/default/prepare.yml`:
+```yaml
+---
+- name: Prepare
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: mullholland.repository_epel
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+      when:
+        - ansible_os_family == "Debian"
+```
+
 
 
 
@@ -95,13 +125,11 @@ This role has been tested on these [container images](https://hub.docker.com/u/m
 -   [debian11](https://hub.docker.com/r/mullholland/docker-molecule-debian11)
 -   [ubuntu1804](https://hub.docker.com/r/mullholland/docker-molecule-ubuntu1804)
 -   [ubuntu2004](https://hub.docker.com/r/mullholland/docker-molecule-ubuntu2004)
--   [centos7](https://hub.docker.com/r/mullholland/docker-molecule-centos7)
 -   [centos-stream8](https://hub.docker.com/r/mullholland/docker-molecule-centos-stream8)
 -   [centos-stream9](https://hub.docker.com/r/mullholland/docker-molecule-centos-stream9)
 -   [ubi8](https://hub.docker.com/r/mullholland/docker-molecule-ubi8)
 -   [fedora34](https://hub.docker.com/r/mullholland/docker-molecule-fedora34)
 -   [fedora35](https://hub.docker.com/r/mullholland/docker-molecule-fedora35)
--   [amazonlinux](https://hub.docker.com/r/mullholland/docker-molecule-amazonlinux)
 -   [rockylinux8](https://hub.docker.com/r/mullholland/docker-molecule-rockylinux8)
 -   [almalinux8](https://hub.docker.com/r/mullholland/docker-molecule-almalinux8)
 
@@ -113,6 +141,14 @@ The minimum version of Ansible required is 2.10, tests have been done to:
 
 
 
+## [Exceptions](#exceptions)
+
+Some variations of the build matrix do not work. These are the variations and reasons why the build won't work:
+
+| variation                 | reason                 |
+|---------------------------|------------------------|
+| amazonlinux | Interpreter Problems |
+| CentOS/RedHat 7 | Interpreter Problems |
 
 
 If you find issues, please register them in [GitHub](https://github.com/mullholland/ansible-role-python_pip/issues)

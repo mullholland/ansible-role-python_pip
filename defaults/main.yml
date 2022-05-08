@@ -12,12 +12,8 @@ python_pip_packages: []
 python_pip_packages_group: []
 python_pip_packages_host: []
 
-# State of the pip packages outside of the venvs
-python_pip_packages_state: present
-# extra pip arguments, wehen installing the packages
-# outside of the venvs
-# default(omit)
-python_pip_packages_args: ""
+# Update pip package before installing packages
+python_pip_update: true
 
 python_pip_venvs: []
 #  - name: "fullExample"         # required

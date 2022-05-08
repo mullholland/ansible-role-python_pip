@@ -5,72 +5,31 @@
   gather_facts: true
   vars:
     python_pip_os_packages_map:
-      CentOS:
-        "7":
-          - "python2-pip"
-          - "python2-setuptools"
-          - "python2-wheel"
-          - "python2-virtualenv"
-        "8":
-          - "python3-pip"
-          - "python3-setuptools"
-          - "python3-wheel"
-          - "python3-virtualenv"
-        "9":
-          - "python3-pip"
-          - "python3-setuptools"
-          - "python3-wheel"
-          - "python3-virtualenv"
-      RedHat:
-        "7":
-          - "python2-pip"
-          - "python2-setuptools"
-          - "python2-wheel"
-          - "python2-virtualenv"
-        "8":
-          - "python3-pip"
-          - "python3-setuptools"
-          - "python3-wheel"
-          - "python3-virtualenv"
-        "9":
-          - "python3-pip"
-          - "python3-setuptools"
-          - "python3-wheel"
-          - "python3-virtualenv"
-      Fedora:
+      CentOS-7:
+        - "python2-pip"
+        - "python-setuptools"
+      RedHat-7:
+        - "python2-pip"
+        - "python-setuptools"
+      Amazon-2:
+        - "python2-pip"
+        - "python2-setuptools"
+      default:
         - "python3-pip"
         - "python3-setuptools"
-        - "python3-wheel"
-        - "python3-virtualenv"
-      Rocky:
-        "8":
-          - "python3-pip"
-          - "python3-setuptools"
-          - "python3-wheel"
-          - "python3-virtualenv"
-      AlmaLinux:
-        "8":
-          - "python3-pip"
-          - "python3-setuptools"
-          - "python3-wheel"
-          - "python3-virtualenv"
-      Amazon:
-        "2":
-          - "python2-pip"
-          - "python2-setuptools"
-          - "python2-wheel"
-          - "python2-virtualenv"
-      Debian:
-        - "python-pip"
-        - "python-setuptools"
-        - "python-wheel"
-        - "python-virtualenv"
-      Ubuntu:
-        - "python-pip"
-        - "python-setuptools"
-        - "python-wheel"
-        - "python-virtualenv"
-    python_pip_os_packages: "{{ python_pip_os_packages_map[ansible_distribution][ansible_distribution_major_version] | default(python_pip_os_packages_map[ansible_distribution]) }}"
+    # yamllint disable-line rule:line-length
+    python_pip_os_packages: "{{ python_pip_os_packages_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(python_pip_os_packages_map['default'] ) }}"
+
+    python_pip_package_map:
+      RedHat-7: "pip==20.3.4"
+      CentOS-7: "pip==20.3.4"
+      default: "pip"
+    # yamllint disable-line rule:line-length
+    python_pip_package: "{{ python_pip_package_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(python_pip_package_map['default'] ) }}"
+
+    python_pip_venv_packages:
+      - "wheel"
+      - "virtualenv"
 
     # converge variables
     python_pip_packages:
@@ -112,23 +71,23 @@
 
     - name: Install packages via pip
       ansible.builtin.pip:
-        name: "{{ python_pip_packages }}"
+        name: "{{ python_pip_venv_packages }}"
         state: present
       check_mode: true
       register: molecule_pip_packages
       failed_when: (molecule_pip_packages is changed) or (molecule_pip_packages is failed)
 
-    - name: check venvs
-      ansible.builtin.pip:
-        name: "{{ item.packages }}"
-        state: present
-        virtualenv: "{{ item.path }}/{{ item.name }}"
-        virtualenv_python: "{{ item.python }}"
-      check_mode: true
-      register: molecule_pip_packages_venvs
-      failed_when: (molecule_pip_packages_venvs is changed) or (molecule_pip_packages_venvs is failed)
-      with_items:
-        - "{{ python_pip_venvs }}"
-      when:
-        - item.packages is defined
-        - item.packages | length > 0
+#    - name: check venvs
+#      ansible.builtin.pip:
+#        name: "{{ item.packages }}"
+#        state: present
+#        virtualenv: "{{ item.path }}/{{ item.name }}"
+#        virtualenv_python: "{{ item.python }}"
+#      check_mode: true
+#      register: molecule_pip_packages_venvs
+#      failed_when: (molecule_pip_packages_venvs is changed) or (molecule_pip_packages_venvs is failed)
+#      with_items:
+#        - "{{ python_pip_venvs }}"
+#      when:
+#        - item.packages is defined
+#        - item.packages | length > 0

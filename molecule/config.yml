@@ -1,7 +1,9 @@
 ---
-# molecule_exceptions:
-#   - variation: alpine
-#     reason: "Not idempotent"
+molecule_exceptions:
+  - variation: "amazonlinux"
+    reason: "Interpreter Problems"
+  - variation: "CentOS/RedHat 7"
+    reason: "Interpreter Problems"
 molecule_scenarios:
   - scenario: "default"
     ansible: ["previous", "current", "next"]
@@ -11,15 +13,10 @@ molecule_scenarios:
       - "debian11"
       - "ubuntu1804"
       - "ubuntu2004"
-      - "centos7"
       - "centos-stream8"
       - "centos-stream9"
       - "ubi8"
       - "fedora34"
       - "fedora35"
-      - "amazonlinux"
       - "rockylinux8"
       - "almalinux8"
-#  - scenario: "alternative"
-#    ansible: ["previous", "current", "next"]
-#    platforms: ["ubuntu1604", "ubuntu1804", "ubuntu2004", "centos7", "centos8"]

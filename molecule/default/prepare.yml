@@ -4,6 +4,9 @@
   become: true
   gather_facts: true
 
+  roles:
+    - role: mullholland.repository_epel
+
   tasks:
     - name: Update apt cache
       ansible.builtin.apt:

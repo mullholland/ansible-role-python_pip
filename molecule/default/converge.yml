@@ -7,9 +7,24 @@
     python_pip_packages:
       - "python-dateutil"
 
+    # pyvenv_command_map:
+    #   CentOS-7:
+    #     - "python2-pip"
+    #     - "python-setuptools"
+    #   RedHat-7:
+    #     - "python2-pip"
+    #     - "python-setuptools"
+    #   Amazon-2:
+    #     - "python2-pip"
+    #     - "python2-setuptools"
+    #   default: "python3 -m venv"
+    # # yamllint disable-line rule:line-length
+    # pyvenv_command: "{{ pyvenv_command_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(pyvenv_command_map['default'] ) }}"
+
+
     python_pip_venvs:
       - name: "fullExample"
-        python: "python"
+        python: "python3"
         path: "/opt"
         packages:
           - "python-dateutil"
