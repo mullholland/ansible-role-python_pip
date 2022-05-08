@@ -1,6 +1,8 @@
 ---
 molecule_exceptions:
-  - variation: amazonlinux
+  - variation: "amazonlinux"
+    reason: "Interpreter Problems"
+  - variation: "CentOS/RedHat 7"
     reason: "Interpreter Problems"
 molecule_scenarios:
   - scenario: "default"
@@ -11,7 +13,6 @@ molecule_scenarios:
       - "debian11"
       - "ubuntu1804"
       - "ubuntu2004"
-      - "centos7"
       - "centos-stream8"
       - "centos-stream9"
       - "ubi8"

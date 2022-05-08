@@ -13,7 +13,7 @@
       - "wheel"
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
-    virtualenv_python: "{{ venv.python }}"
+    virtualenv_python: "{{ venv.python | default(omit) }}"
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
 
@@ -22,7 +22,7 @@
     name: "{{ venv.packages }}"
     extra_args: "{{ venv.extra_args | default(omit) }}"
     virtualenv: "{{ venv.path }}/{{ venv.name }}"
-    virtualenv_python: "{{ venv.python }}"
+    virtualenv_python: "{{ venv.python | default(omit) }}"
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
   when:

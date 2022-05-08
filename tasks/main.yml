@@ -20,11 +20,6 @@
         state: present
   when: (ansible_python_version is version('3.0.0', '<'))
 
-- name: Install virtualenv/wheel
-  ansible.builtin.pip:
-    name: "{{ python_pip_venv_packages }}"
-    state: "latest"  # noqa package-latest
-
 - name: Build pip package list
   ansible.builtin.set_fact:
     python_pip_packages_merged: "{{ python_pip_packages_merged + [item] }}"
@@ -39,6 +34,11 @@
     state: "latest"  # noqa package-latest
   when:
     - python_pip_update | bool
+
+- name: Install virtualenv/wheel
+  ansible.builtin.pip:
+    name: "{{ python_pip_venv_packages }}"
+    state: "latest"  # noqa package-latest
 
 - name: Install packages via pip
   ansible.builtin.pip:
