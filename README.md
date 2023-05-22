@@ -1,5 +1,10 @@
 # [python_pip](#python_pip)
 
+**IMPORTANT**
+This role will no longer be updated. you can use [robertdebock/ansible-role-update_pip_packages](https://github.com/robertdebock/ansible-role-update_pip_packages) or [robertdebock/ansible-role-python_pip](https://github.com/robertdebock/ansible-role-python_pip) as an alternative.
+
+---
+
 |GitHub|GitLab|
 |------|------|
 |[![github](https://github.com/mullholland/ansible-role-python_pip/workflows/Ansible%20Molecule/badge.svg)](https://github.com/mullholland/ansible-role-python_pip/actions)|[![gitlab](https://gitlab.com/mullholland/ansible-role-python_pip/badges/main/pipeline.svg)](https://gitlab.com/mullholland/ansible-role-python_pip)|
