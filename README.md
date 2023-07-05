@@ -1,58 +1,15 @@
 # [python_pip](#python_pip)
 
-**IMPORTANT**
-This role will no longer be updated. you can use [robertdebock/ansible-role-update_pip_packages](https://github.com/robertdebock/ansible-role-update_pip_packages) or [robertdebock/ansible-role-python_pip](https://github.com/robertdebock/ansible-role-python_pip) as an alternative.
+install and configure virtual environments with pip
 
----
-
-|GitHub|GitLab|
-|------|------|
-|[![github](https://github.com/mullholland/ansible-role-python_pip/workflows/Ansible%20Molecule/badge.svg)](https://github.com/mullholland/ansible-role-python_pip/actions)|[![gitlab](https://gitlab.com/mullholland/ansible-role-python_pip/badges/main/pipeline.svg)](https://gitlab.com/mullholland/ansible-role-python_pip)|
-
-description
-
-## [Role Variables](#role-variables)
-
-These variables are set in `defaults/main.yml`:
-```yaml
----
-# WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour
-# with the system package manager. It is recommended to use a virtual environment
-# instead: https://pip.pypa.io/warnings/venv
-# For example the variables `python_pip_venvs` down below
-# Define pip packages
-python_pip_packages: []
-#  - "python-dateutil"
-#  - "python-dateutil==0.11"
-#  - "python-dateutil>=1.1,<=2.1"
-#  - "python-dateutil>=1"
-python_pip_packages_group: []
-python_pip_packages_host: []
-
-# Update pip package before installing packages
-python_pip_update: true
-
-python_pip_venvs: []
-#  - name: "fullExample"         # required
-#    python: "python"            # required
-#    path: "/opt"                # required
-#    packages:                   # optional => default(omit)
-#      - "python-dateutil"
-#    extra_args: "--no-compile"  # optional => default(omit)
-#    state: latest               # optional => default("present")
-#  - name: "minExample"
-#    python: "python"
-#    path: "/opt"
-#  - name: "mixExample"
-#    python: "python"
-#    path: "/opt"
-#    state: latest
-```
-
+|GitHub|GitLab|Quality|Downloads|Version|
+|------|------|-------|---------|-------|
+|[![github](https://github.com/mullholland/ansible-role-python_pip/workflows/Ansible%20Molecule/badge.svg)](https://github.com/mullholland/ansible-role-python_pip/actions)|[![gitlab](https://gitlab.com/opensourceunicorn/ansible-role-python_pip/badges/master/pipeline.svg)](https://gitlab.com/opensourceunicorn/ansible-role-python_pip)|[![quality](https://img.shields.io/ansible/quality/59128)](https://galaxy.ansible.com/mullholland/python_pip)|[![downloads](https://img.shields.io/ansible/role/d/59128)](https://galaxy.ansible.com/mullholland/python_pip)|[![Version](https://img.shields.io/github/release/mullholland/ansible-role-python_pip.svg)](https://github.com/mullholland/ansible-role-python_pip/releases/)|
 
 ## [Example Playbook](#example-playbook)
 
-This example is taken from `molecule/default/converge.yml` and is tested on each push, pull request and release.
+This example is taken from [`molecule/default/converge.yml`](https://github.com/mullholland/ansible-role-python_pip/blob/master/molecule/default/converge.yml) and is tested on each push, pull request and release.
+
 ```yaml
 ---
 - name: Converge
@@ -98,7 +55,8 @@ This example is taken from `molecule/default/converge.yml` and is tested on each
     - role: "mullholland.python_pip"
 ```
 
-The machine needs to be prepared in CI this is done using `molecule/default/prepare.yml`:
+The machine needs to be prepared. In CI this is done using [`molecule/default/prepare.yml`](https://github.com/mullholland/ansible-role-python_pip/blob/master/molecule/default/prepare.yml):
+
 ```yaml
 ---
 - name: Prepare
@@ -118,55 +76,83 @@ The machine needs to be prepared in CI this is done using `molecule/default/prep
 ```
 
 
+## [Role Variables](#role-variables)
+
+The default values for the variables are set in [`defaults/main.yml`](https://github.com/mullholland/ansible-role-python_pip/blob/master/defaults/main.yml):
+
+```yaml
+---
+# WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour
+# with the system package manager. It is recommended to use a virtual environment
+# instead: https://pip.pypa.io/warnings/venv
+# For example the variables `python_pip_venvs` down below
+# Define pip packages
+python_pip_packages: []
+#  - "python-dateutil"
+#  - "python-dateutil==0.11"
+#  - "python-dateutil>=1.1,<=2.1"
+#  - "python-dateutil>=1"
+python_pip_packages_group: []
+python_pip_packages_host: []
+
+# Update pip package before installing packages
+python_pip_update: true
+
+python_pip_venvs: []
+#  - name: "fullExample"         # required
+#    python: "python"            # required
+#    path: "/opt"                # required
+#    packages:                   # optional => default(omit)
+#      - "python-dateutil"
+#    extra_args: "--no-compile"  # optional => default(omit)
+#    state: latest               # optional => default("present")
+#  - name: "minExample"
+#    python: "python"
+#    path: "/opt"
+#  - name: "mixExample"
+#    python: "python"
+#    path: "/opt"
+#    state: latest
+```
+
+## [Requirements](#requirements)
+
+- pip packages listed in [requirements.txt](https://github.com/mullholland/ansible-role-python_pip/blob/master/requirements.txt).
 
 
+## [Context](#context)
+
+This role is a part of many compatible roles. Have a look at [the documentation of these roles](https://mullholland.net) for further information.
+
+Here is an overview of related roles:
+![dependencies](https://raw.githubusercontent.com/mullholland/ansible-role-python_pip/png/requirements.png "Dependencies")
 
 ## [Compatibility](#compatibility)
 
 This role has been tested on these [container images](https://hub.docker.com/u/mullholland):
 
--   [debian9](https://hub.docker.com/r/mullholland/docker-molecule-debian9)
--   [debian10](https://hub.docker.com/r/mullholland/docker-molecule-debian10)
--   [debian11](https://hub.docker.com/r/mullholland/docker-molecule-debian11)
--   [ubuntu1804](https://hub.docker.com/r/mullholland/docker-molecule-ubuntu1804)
--   [ubuntu2004](https://hub.docker.com/r/mullholland/docker-molecule-ubuntu2004)
--   [ubuntu2204](https://hub.docker.com/r/mullholland/docker-molecule-ubuntu2204)
--   [centos-stream8](https://hub.docker.com/r/mullholland/docker-molecule-centos-stream8)
--   [centos-stream9](https://hub.docker.com/r/mullholland/docker-molecule-centos-stream9)
--   [ubi8](https://hub.docker.com/r/mullholland/docker-molecule-ubi8)
--   [fedora35](https://hub.docker.com/r/mullholland/docker-molecule-fedora35)
--   [fedora36](https://hub.docker.com/r/mullholland/docker-molecule-fedora36)
--   [rockylinux8](https://hub.docker.com/r/mullholland/docker-molecule-rockylinux8)
--   [almalinux8](https://hub.docker.com/r/mullholland/docker-molecule-almalinux8)
+|container|tags|
+|---------|----|
+|[EL](https://hub.docker.com/repository/docker/mullholland/docker-centos-systemd/general)|all|
+|[Amazon](https://hub.docker.com/repository/docker/mullholland/docker-amazonlinux-systemd/general)|Candidate|
+|[Fedora](https://hub.docker.com/repository/docker/mullholland/docker-fedora-systemd/general)|all|
+|[Ubuntu](https://hub.docker.com/repository/docker/mullholland/docker-ubuntu-systemd/general)|all|
+|[Debian](https://hub.docker.com/repository/docker/mullholland/docker-debian-systemd/general)|all|
 
 The minimum version of Ansible required is 2.10, tests have been done to:
 
--   The previous versions.
--   The current version.
-
-
-
-## [Exceptions](#exceptions)
-
-Some variations of the build matrix do not work. These are the variations and reasons why the build won't work:
-
-| variation                 | reason                 |
-|---------------------------|------------------------|
-| amazonlinux | Interpreter Problems |
-| CentOS/RedHat 7 | Interpreter Problems |
-
+- The previous version.
+- The current version.
+- The development version.
 
 If you find issues, please register them in [GitHub](https://github.com/mullholland/ansible-role-python_pip/issues)
 
 ## [License](#license)
 
-MIT
-
+[MIT](https://github.com/mullholland/ansible-role-python_pip/blob/master/LICENSE).
 
 ## [Author Information](#author-information)
 
-[Mullholland](https://github.com/mullholland)
+[Mullholland](https://mullholland.net)
 
-## [Special Thanks](#special-thanks)
-
-Template inspired by [Robert de Bock](https://github.com/robertdebock)
+Please consider [sponsoring me](https://github.com/sponsors/mullholland).

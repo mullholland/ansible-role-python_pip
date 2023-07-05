@@ -9,6 +9,7 @@
 # The setuptools package must be installed for both the Ansible Python
 # interpreter and for the version of Python specified by this option.
 - name: install python2-setuptools for python2 interpreter
+  when: (ansible_python_version is version('3.0.0', '<'))
   block:
     - name: Debug ansible_python_version
       ansible.builtin.debug:
@@ -18,7 +19,6 @@
       ansible.builtin.package:
         name: python-setuptools
         state: present
-  when: (ansible_python_version is version('3.0.0', '<'))
 
 - name: Build pip package list
   ansible.builtin.set_fact:

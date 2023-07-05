@@ -1,0 +1,8 @@
+---
+#
+# Ansible managed
+#
+repository:
+  description: install and configure virtual environments with pip
+  homepage: https://mullholland.net
+  topics: development, packaging, system, ansible, molecule, tox, playbook
