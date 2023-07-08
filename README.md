@@ -20,24 +20,9 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
     python_pip_packages:
       - "python-dateutil"
 
-    # pyvenv_command_map:
-    #   CentOS-7:
-    #     - "python2-pip"
-    #     - "python-setuptools"
-    #   RedHat-7:
-    #     - "python2-pip"
-    #     - "python-setuptools"
-    #   Amazon-2:
-    #     - "python2-pip"
-    #     - "python2-setuptools"
-    #   default: "python3 -m venv"
-    # # yamllint disable-line rule:line-length
-    # pyvenv_command: "{{ pyvenv_command_map[ansible_distribution ~ '-' ~ ansible_distribution_major_version] | default(pyvenv_command_map['default'] ) }}"
-
-
     python_pip_venvs:
       - name: "fullExample"
-        python: "python3"
+        python: "python"
         path: "/opt"
         packages:
           - "python-dateutil"
@@ -119,6 +104,13 @@ python_pip_venvs: []
 
 - pip packages listed in [requirements.txt](https://github.com/mullholland/ansible-role-python_pip/blob/master/requirements.txt).
 
+## [State of used roles](#state-of-used-roles)
+
+The following roles are used to prepare a system. You can prepare your system in another way.
+
+| Requirement | GitHub | GitLab |
+|-------------|--------|--------|
+|[mullholland.repository_epel](https://galaxy.ansible.com/mullholland/repository_epel)|[![Build Status GitHub](https://github.com/mullholland/ansible-role-repository_epel/workflows/Ansible%20Molecule/badge.svg)](https://github.com/mullholland/ansible-role-repository_epel/actions)|[![Build Status GitLab](https://gitlab.com/opensourceunicorn/ansible-role-repository_epel/badges/master/pipeline.svg)](https://gitlab.com/opensourceunicorn/ansible-role-repository_epel)|
 
 ## [Context](#context)
 
